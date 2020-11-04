@@ -1,9 +1,7 @@
-import { type } from 'os';
-
 export type NodeID = string;
 export type EdgeID = string;
 // not sure about this
-export type EdgeWeight = number;
+export type EdgeWeight = string | number;
 export type Adjacents = Set<NodeID>;
 
 export interface GraphNode {
