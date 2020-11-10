@@ -100,19 +100,29 @@ class Graph {
 
   // gets the weight of the given edge, returns 1 if no weight was previously set.
   // use number as weights just now
-  getEdgeWeight(u: NodeID, v: NodeID): EdgeWeight {
-    const weight = this.edgeWeights.get(Graph.encodeEdge(u, v));
-
-    return weight === undefined ? 1 : weight;
+  getEdgeWeight(u: NodeID, v: NodeID): EdgeWeight | undefined {
+    return this.edgeWeights.get(Graph.encodeEdge(u, v));
   }
 
-  // Sets the weight of the given edge.
+  // sets the weight of the given edge.
   setEdgeWeight(u: NodeID, v: NodeID, weight?: EdgeWeight): Graph {
     if (weight) {
       this.edgeWeights.set(Graph.encodeEdge(u, v), weight);
     }
 
     return this;
+  }
+
+  // omit weight property when undefined, simplify serialize
+  wrapEdgeWeight(u: NodeID, v: NodeID): GraphEdge {
+    const weight = this.getEdgeWeight(u, v);
+    const required = {
+      source: u,
+      target: v,
+    };
+    const optional = weight ? {} : { weight };
+
+    return { ...required, ...optional };
   }
 
   serialize(): Serialized {
@@ -124,11 +134,7 @@ class Graph {
       const _edges: GraphEdge[] = [];
 
       this.adjacent(id).forEach((aid) => {
-        _edges.push({
-          source: id,
-          target: aid,
-          weight: this.getEdgeWeight(id, aid),
-        });
+        _edges.push(this.wrapEdgeWeight(id, aid));
       });
 
       return [...acc, ..._edges];
@@ -153,8 +159,8 @@ class Graph {
     return this;
   }
 
-  // Computes the indegree for the given node.
-  // Not very efficient, costs O(E) where E = number of edges.
+  // computes the indegree for the given node.
+  // not very efficient, costs O(E) where E = number of edges.
   indegree(nid: NodeID): number {
     return Array.from(this.edges.values()).reduce<number>((acc, curr) => {
       return curr.has(nid) ? acc + 1 : acc;

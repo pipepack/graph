@@ -1,7 +1,7 @@
 export type NodeID = string;
 export type EdgeID = string;
 // not sure about this
-export type EdgeWeight = string | number;
+export type EdgeWeight = string;
 export type Adjacents = Set<NodeID>;
 
 export interface GraphNode {
