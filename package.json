@@ -1,31 +1,33 @@
 {
-  "name": "graph",
+  "name": "@pipepack/graph",
   "version": "0.1.0",
   "description": "A graph data structure with pipepack related algorithm.",
   "main": "lib/index.js",
-  "types": "src/index.ts",
+  "types": "types/index.ts",
   "engines": {
     "node": ">=10.0.0"
   },
   "scripts": {
-    "prepublishOnly": "npm-run-all -s clean compile",
+    "prepublishOnly": "npm-run-all -s clean compile:code compile:types",
     "test": "jest --coverage",
     "test:cov": "jest --watch",
-    "clean": "rm -rf lib",
-    "compile": "babel src --source-maps --out-dir lib --extensions '.js,.ts'",
+    "clean": "rm -rf lib types",
+    "compile:code": "babel src --source-maps --out-dir lib --extensions '.js,.ts'",
+    "compile:types": "tsc --project tsconfig.production.json",
     "compile:watch": "babel src --source-maps --out-dir lib --extensions '.js,.ts' --watch"
   },
   "files": [
     "lib",
-    "native"
+    "types"
   ],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/pipepack/graph.git"
   },
   "keywords": [
-    "nodejs",
-    "universal"
+    "pipepack",
+    "graph-strucutre",
+    "graph-algorithms"
   ],
   "author": "huang.jian <hjj491229492@hotmail.com>",
   "contributors": [
